@@ -1,4 +1,4 @@
-﻿Namespace Modelos
+﻿Namespace SistemaHorarios.Modelos
 
     Public Class Docente
 

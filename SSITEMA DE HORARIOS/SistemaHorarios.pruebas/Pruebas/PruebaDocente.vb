@@ -1,4 +1,6 @@
-﻿Imports SistemaHorarios.Logica.Negocio.Docentes
+﻿Imports Negocio.Docentes
+Imports SistemaHorarios.Logica.Negocio.Docentes
+Imports SistemaHorarios.Modelos
 Imports SistemaHorarios.Modelos.Modelos
 
 Module PruebaDocente
@@ -7,14 +9,8 @@ Module PruebaDocente
 
         Try
 
-            ' =========================================
-            ' CREAR INSTANCIA DEL GESTOR
-            ' =========================================
             Dim gestor As New GestorDocente()
 
-            ' =========================================
-            ' CREAR DOCENTE
-            ' =========================================
             Dim docente As New Docente()
 
             docente.Identificacion = "123456"
@@ -23,51 +19,28 @@ Module PruebaDocente
 
             gestor.CrearDocente(docente)
 
-            Console.WriteLine(
-                "Docente creado correctamente.")
+            Console.WriteLine("Docente creado correctamente.")
 
-            ' =========================================
-            ' CONSULTAR DOCENTE
-            ' =========================================
             Dim docenteConsultado As Docente =
-                gestor.ObtenerDocentePorIdentificacion(
-                    "123456")
+                gestor.ObtenerDocentePorIdentificacion("123456")
 
-            Console.WriteLine(
-                "Nombre: " &
-                docenteConsultado.Nombre)
+            Console.WriteLine("Nombre: " & docenteConsultado.Nombre)
+            Console.WriteLine("Correo: " & docenteConsultado.CorreoElectronico)
 
-            Console.WriteLine(
-                "Correo: " &
-                docenteConsultado.CorreoElectronico)
+            docenteConsultado.Nombre = "Sebastian Actualizado"
+            docenteConsultado.CorreoElectronico = "nuevo@gmail.com"
 
-            ' =========================================
-            ' ACTUALIZAR DOCENTE
-            ' =========================================
-            docenteConsultado.Nombre =
-                "Sebastian Actualizado"
+            gestor.ActualizarDocente(docenteConsultado)
 
-            docenteConsultado.CorreoElectronico =
-                "nuevo@gmail.com"
+            Console.WriteLine("Docente actualizado correctamente.")
 
-            gestor.ActualizarDocente(
-                docenteConsultado)
-
-            Console.WriteLine(
-                "Docente actualizado correctamente.")
-
-            ' =========================================
-            ' ELIMINAR DOCENTE
-            ' =========================================
             gestor.EliminarDocente("123456")
 
-            Console.WriteLine(
-                "Docente eliminado correctamente.")
+            Console.WriteLine("Docente eliminado correctamente.")
 
         Catch ex As Exception
 
-            Console.WriteLine(
-                "ERROR: " & ex.Message)
+            Console.WriteLine("ERROR: " & ex.Message)
 
         End Try
 

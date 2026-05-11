@@ -6,7 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C5275CA2-430B-44DD-82E7-B084A2A7E245}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SistemaHorarios.Logica</RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <AssemblyName>SistemaHorarios.Logica</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
@@ -69,6 +70,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

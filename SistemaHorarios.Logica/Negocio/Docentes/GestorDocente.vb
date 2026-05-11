@@ -3,12 +3,12 @@
 ' =========================================================
 ' Permite utilizar la clase Docente
 
-Imports SistemaHorarios.Modelos.Modelos
+Imports SistemaHorarios.Modelos
 
 ' =========================================================
 ' NAMESPACE DEL MODULO DE NEGOCIO DE DOCENTES
 ' =========================================================
-Namespace Negocio.Docentes
+Namespace SistemaHorarios.Logica.Negocio.Docentes
 
     ' =====================================================
     ' CLASE GESTORDOCENTE
