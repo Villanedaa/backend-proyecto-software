@@ -4,31 +4,35 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C5275CA2-430B-44DD-82E7-B084A2A7E245}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>SistemaHorarios.Logica</RootNamespace>
-    <AssemblyName>SistemaHorarios.Logica</AssemblyName>
+    <ProjectGuid>{18C13825-D0E6-4667-A711-CADC3C04B556}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>SistemaHorarios.pruebas.Module1</StartupObject>
+    <RootNamespace>SistemaHorarios.pruebas</RootNamespace>
+    <AssemblyName>SistemaHorarios.pruebas</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>SistemaHorarios.Logica.xml</DocumentationFile>
+    <DocumentationFile>SistemaHorarios.pruebas.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>SistemaHorarios.Logica.xml</DocumentationFile>
+    <DocumentationFile>SistemaHorarios.pruebas.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -46,6 +50,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,7 +69,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.vb" />
+    <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -80,7 +85,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Negocio\Docentes\GestorDocente.vb" />
+    <Compile Include="Pruebas\PruebaDocente.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -100,21 +105,18 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Negocio\Grupos\" />
-    <Folder Include="Negocio\Materias\" />
-    <Folder Include="Negocio\PlanAcademico\" />
-    <Folder Include="Negocio\Reportes\" />
-    <Folder Include="Negocio\Seguridad\" />
-    <Folder Include="Negocio\Tapsi\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SistemaHorarios.Datos\SistemaHorarios.Datos.vbproj">
+    <ProjectReference Include="..\..\SistemaHorarios.Datos\SistemaHorarios.Datos.vbproj">
       <Project>{7df1d89f-8846-4f26-bf50-a49fe5d7ab31}</Project>
       <Name>SistemaHorarios.Datos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SistemaHorarios.Modelos\SistemaHorarios.Modelos.vbproj">
+    <ProjectReference Include="..\..\SistemaHorarios.Logica\SistemaHorarios.Logica.vbproj">
+      <Project>{c5275ca2-430b-44dd-82e7-b084a2a7e245}</Project>
+      <Name>SistemaHorarios.Logica</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SistemaHorarios.Modelos\SistemaHorarios.Modelos.vbproj">
       <Project>{856bdec0-13e4-4eff-af4e-06c1deb043a5}</Project>
       <Name>SistemaHorarios.Modelos</Name>
     </ProjectReference>

@@ -100,5 +100,11 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SistemaHorarios.Modelos\SistemaHorarios.Modelos.vbproj">
+      <Project>{856bdec0-13e4-4eff-af4e-06c1deb043a5}</Project>
+      <Name>SistemaHorarios.Modelos</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
