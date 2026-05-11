@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../SistemaHorarios.Datos/SistemaHorarios.Datos.vbproj" Id="7df1d89f-8846-4f26-bf50-a49fe5d7ab31" />
+  <Project Path="../SistemaHorarios.Logica/SistemaHorarios.Logica.vbproj" Id="c5275ca2-430b-44dd-82e7-b084a2a7e245" />
+  <Project Path="../SistemaHorarios.Logica/SistemaHorarios.ui.vbproj" />
+  <Project Path="../SistemaHorarios.Modelos/SistemaHorarios.Modelos.vbproj" Id="856bdec0-13e4-4eff-af4e-06c1deb043a5" />
+  <Project Path="../SistemaHorarios.pruebas/SistemaHorarios.pruebas.vbproj" Id="1bad4b60-6a7d-4392-b1c5-df11c83f1983" />
+</Solution>
