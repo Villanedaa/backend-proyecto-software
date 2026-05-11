@@ -83,6 +83,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Negocio\Docentes\GestorDocente.vb" />
+    <Compile Include="Negocio\Docentes\ValidadorDocente.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

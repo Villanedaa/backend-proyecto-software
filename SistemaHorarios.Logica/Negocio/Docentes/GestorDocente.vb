@@ -1,8 +1,6 @@
 ﻿' =========================================================
 ' IMPORTACION DEL NAMESPACE DE MODELOS
 ' =========================================================
-' Permite utilizar la clase Docente
-
 Imports SistemaHorarios.Modelos
 
 ' =========================================================
@@ -13,14 +11,8 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
     ' =====================================================
     ' CLASE GESTORDOCENTE
     ' =====================================================
-    ' Esta clase contiene toda la lógica de negocio
-    ' relacionada con los docentes.
-    '
-    ' Funcionalidades:
-    ' - Crear docentes
-    ' - Actualizar docentes
-    ' - Eliminar docentes
-    ' - Consultar docentes
+    ' Contiene la lógica CRUD de los docentes.
+    ' Delega todas las validaciones a ValidadorDocente.
     ' =====================================================
     Public Class GestorDocente
 
@@ -29,58 +21,60 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         ' =================================================
         ' Simula una base de datos mientras se desarrolla
         ' el backend.
-        '
-        ' Shared:
-        ' La lista será compartida por todas las instancias
-        ' de la clase.
         ' =================================================
         Private Shared ListaDocentes As New List(Of Docente)
+
+        ' =================================================
+        ' INSTANCIA DEL VALIDADOR
+        ' =================================================
+        ' Se utiliza para validar los datos del docente
+        ' antes de ejecutar cualquier operación CRUD.
+        ' =================================================
+        Private ReadOnly Validador As New ValidadorDocente
 
         ' =====================================================
         ' METODO: CREAR DOCENTE
         ' =====================================================
-        ' Este método permite registrar un nuevo docente.
+        ' Registra un nuevo docente en la lista.
         '
         ' PARAMETROS:
-        ' docente -> Objeto tipo Docente con la información
-        '             del nuevo docente.
+        ' docente -> Objeto Docente con la información
+        '            del nuevo docente.
         '
         ' RETORNA:
         ' True -> Si el docente fue creado correctamente.
-        '
-        ' VALIDACIONES:
-        ' - El objeto docente no puede ser nulo.
-        ' - La identificación no puede repetirse.
         ' =====================================================
-        Public Function CrearDocente(
-            docente As Docente) As Boolean
+        Public Function CrearDocente(docente As Docente) As Boolean
 
             ' =============================================
-            ' VALIDAR QUE EL OBJETO NO SEA NULO
+            ' VALIDAR TODOS LOS CAMPOS DEL DOCENTE
+            ' Delega la validación a ValidadorDocente
             ' =============================================
-            If docente Is Nothing Then
-
-                Throw New Exception(
-                    "La información del docente es obligatoria.")
-
-            End If
+            Validador.ValidarCamposDocente(docente)
 
             ' =============================================
-            ' BUSCAR SI YA EXISTE UN DOCENTE
-            ' CON LA MISMA IDENTIFICACION
+            ' VALIDAR QUE LA IDENTIFICACION
+            ' NO ESTE DUPLICADA
             ' =============================================
             Dim docenteExistente = ListaDocentes.FirstOrDefault(
                 Function(d) d.Identificacion =
                     docente.Identificacion)
 
-            ' =============================================
-            ' VALIDAR IDENTIFICACION DUPLICADA
-            ' =============================================
             If docenteExistente IsNot Nothing Then
-
                 Throw New Exception(
                     "Ya existe un docente con esa identificación.")
+            End If
 
+            ' =============================================
+            ' VALIDAR QUE EL CORREO NO ESTE DUPLICADO
+            ' =============================================
+            Dim correoExistente = ListaDocentes.FirstOrDefault(
+                Function(d) d.CorreoElectronico.ToLower() =
+                    docente.CorreoElectronico.ToLower())
+
+            If correoExistente IsNot Nothing Then
+                Throw New Exception(
+                    "Ya existe un docente con ese correo electrónico.")
             End If
 
             ' =============================================
@@ -92,6 +86,18 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
             ' ASIGNAR ESTADO ACTIVO POR DEFECTO
             ' =============================================
             docente.Estado = True
+
+            ' =============================================
+            ' NORMALIZAR NOMBRE
+            ' Elimina espacios al inicio y al final
+            ' =============================================
+            docente.Nombre = docente.Nombre.Trim()
+
+            ' =============================================
+            ' NORMALIZAR CORREO A MINUSCULAS
+            ' =============================================
+            docente.CorreoElectronico =
+                docente.CorreoElectronico.ToLower().Trim()
 
             ' =============================================
             ' AGREGAR DOCENTE A LA LISTA
@@ -108,7 +114,7 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         ' =====================================================
         ' METODO: ACTUALIZAR DOCENTE
         ' =====================================================
-        ' Permite modificar la información de un docente.
+        ' Modifica la información de un docente existente.
         '
         ' PARAMETROS:
         ' docenteActualizado -> Objeto con la nueva
@@ -116,23 +122,15 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         '
         ' RETORNA:
         ' True -> Si la actualización fue exitosa.
-        '
-        ' VALIDACIONES:
-        ' - El objeto no puede ser nulo.
-        ' - El docente debe existir.
         ' =====================================================
         Public Function ActualizarDocente(
             docenteActualizado As Docente) As Boolean
 
             ' =============================================
-            ' VALIDAR QUE EL OBJETO NO SEA NULO
+            ' VALIDAR TODOS LOS CAMPOS DEL DOCENTE
+            ' Delega la validación a ValidadorDocente
             ' =============================================
-            If docenteActualizado Is Nothing Then
-
-                Throw New Exception(
-                    "La información del docente es obligatoria.")
-
-            End If
+            Validador.ValidarCamposDocente(docenteActualizado)
 
             ' =============================================
             ' BUSCAR EL DOCENTE POR IDENTIFICACION
@@ -145,29 +143,39 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
             ' VALIDAR QUE EL DOCENTE EXISTA
             ' =============================================
             If docente Is Nothing Then
-
                 Throw New Exception(
                     "Docente no encontrado.")
-
             End If
 
             ' =============================================
-            ' ACTUALIZAR NOMBRE
+            ' VALIDAR QUE EL NUEVO CORREO NO ESTE
+            ' EN USO POR OTRO DOCENTE DIFERENTE
             ' =============================================
-            docente.Nombre =
-                docenteActualizado.Nombre
+            Dim correoEnUso = ListaDocentes.FirstOrDefault(
+                Function(d) d.CorreoElectronico.ToLower() =
+                    docenteActualizado.CorreoElectronico.ToLower() AndAlso
+                    d.Identificacion <> docenteActualizado.Identificacion)
+
+            If correoEnUso IsNot Nothing Then
+                Throw New Exception(
+                    "El correo electrónico ya está en uso por otro docente.")
+            End If
 
             ' =============================================
-            ' ACTUALIZAR CORREO ELECTRONICO
+            ' ACTUALIZAR NOMBRE (normalizado)
+            ' =============================================
+            docente.Nombre = docenteActualizado.Nombre.Trim()
+
+            ' =============================================
+            ' ACTUALIZAR CORREO (normalizado a minúsculas)
             ' =============================================
             docente.CorreoElectronico =
-                docenteActualizado.CorreoElectronico
+                docenteActualizado.CorreoElectronico.ToLower().Trim()
 
             ' =============================================
             ' ACTUALIZAR ESTADO
             ' =============================================
-            docente.Estado =
-                docenteActualizado.Estado
+            docente.Estado = docenteActualizado.Estado
 
             ' =============================================
             ' RETORNAR OPERACION EXITOSA
@@ -180,64 +188,50 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         ' METODO: ELIMINAR DOCENTE
         ' =====================================================
         ' Realiza una eliminación lógica del docente.
-        '
-        ' NO elimina el registro físicamente.
-        ' Solamente cambia el estado a FALSE.
+        ' NO elimina el registro físicamente,
+        ' solo cambia Estado a False.
         '
         ' PARAMETROS:
         ' identificacion -> Identificación del docente.
         '
         ' RETORNA:
         ' True -> Si la eliminación fue exitosa.
-        '
-        ' VALIDACIONES:
-        ' - La identificación es obligatoria.
-        ' - El docente debe existir.
-        ' - El docente no debe estar eliminado.
         ' =====================================================
         Public Function EliminarDocente(
             identificacion As String) As Boolean
 
             ' =============================================
-            ' VALIDAR IDENTIFICACION VACIA
+            ' VALIDAR LA IDENTIFICACION
+            ' Delega la validación a ValidadorDocente
             ' =============================================
-            If String.IsNullOrWhiteSpace(
-                identificacion) Then
-
-                Throw New Exception(
-                    "La identificación es obligatoria.")
-
-            End If
+            Validador.ValidarIdentificacion(identificacion)
 
             ' =============================================
-            ' BUSCAR DOCENTE
+            ' BUSCAR DOCENTE POR IDENTIFICACION
             ' =============================================
             Dim docente = ListaDocentes.FirstOrDefault(
-                Function(d) d.Identificacion =
-                    identificacion)
+                Function(d) d.Identificacion = identificacion)
 
             ' =============================================
             ' VALIDAR QUE EL DOCENTE EXISTA
             ' =============================================
             If docente Is Nothing Then
-
                 Throw New Exception(
                     "Docente no encontrado.")
-
             End If
 
             ' =============================================
             ' VALIDAR SI YA ESTA ELIMINADO
             ' =============================================
             If docente.Estado = False Then
-
                 Throw New Exception(
                     "El docente ya fue eliminado.")
-
             End If
 
             ' =============================================
             ' ELIMINACION LOGICA
+            ' Cambia el estado a False en lugar de
+            ' borrar el registro físicamente
             ' =============================================
             docente.Estado = False
 
@@ -251,52 +245,39 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         ' =====================================================
         ' METODO: OBTENER DOCENTE POR IDENTIFICACION
         ' =====================================================
-        ' Permite buscar un docente utilizando
-        ' la identificación.
+        ' Busca y retorna un docente por su identificación.
         '
         ' PARAMETROS:
         ' identificacion -> Identificación del docente.
         '
         ' RETORNA:
         ' Objeto tipo Docente.
-        '
-        ' VALIDACIONES:
-        ' - La identificación es obligatoria.
-        ' - El docente debe existir.
         ' =====================================================
         Public Function ObtenerDocentePorIdentificacion(
             identificacion As String) As Docente
 
             ' =============================================
-            ' VALIDAR IDENTIFICACION VACIA
+            ' VALIDAR LA IDENTIFICACION
+            ' Delega la validación a ValidadorDocente
             ' =============================================
-            If String.IsNullOrWhiteSpace(
-                identificacion) Then
-
-                Throw New Exception(
-                    "La identificación es obligatoria.")
-
-            End If
+            Validador.ValidarIdentificacion(identificacion)
 
             ' =============================================
             ' BUSCAR DOCENTE
             ' =============================================
             Dim docente = ListaDocentes.FirstOrDefault(
-                Function(d) d.Identificacion =
-                    identificacion)
+                Function(d) d.Identificacion = identificacion)
 
             ' =============================================
             ' VALIDAR QUE EL DOCENTE EXISTA
             ' =============================================
             If docente Is Nothing Then
-
                 Throw New Exception(
                     "Docente no encontrado.")
-
             End If
 
             ' =============================================
-            ' RETORNAR DOCENTE
+            ' RETORNAR DOCENTE ENCONTRADO
             ' =============================================
             Return docente
 
@@ -305,7 +286,7 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         ' =====================================================
         ' METODO: OBTENER TODOS LOS DOCENTES
         ' =====================================================
-        ' Retorna la lista completa de docentes.
+        ' Retorna la lista completa de docentes registrados.
         '
         ' RETORNA:
         ' List(Of Docente)
@@ -313,6 +294,9 @@ Namespace SistemaHorarios.Logica.Negocio.Docentes
         Public Function ObtenerTodosLosDocentes() _
             As List(Of Docente)
 
+            ' =============================================
+            ' RETORNAR LISTA COMPLETA
+            ' =============================================
             Return ListaDocentes
 
         End Function
